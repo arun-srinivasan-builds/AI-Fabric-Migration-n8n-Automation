@@ -1,0 +1,253 @@
+﻿{
+  "name": "AI-Fabric-Migration",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://YOUR-FASTAPI-HOST/assess",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"project_id\": \"{{ $json.project_id }}\",\n  \"application_name\": \"{{ $json.application_name }}\",\n  \"source_platform\": \"{{ $json.source_platform }}\",\n  \"workload_type\": \"{{ $json.workload_type }}\",\n  \"data_size_gb\": {{ $json.data_size_gb }},\n  \"daily_jobs\": {{ $json.daily_jobs }},\n  \"dependencies\": {{ JSON.stringify($json.dependencies) }},\n  \"business_criticality\": \"{{ $json.business_criticality }}\",\n  \"current_issues\": \"{{ $json.current_issues }}\",\n  \"target_platform\": \"{{ $json.target_platform }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -544,
+        -544
+      ],
+      "id": "a3dae043-3d9f-4ffa-8121-c8bc9fdce9fa",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b11d0273-a61a-48ef-965d-d53f0cff1beb",
+              "leftValue": "={{ $json.risk_level }}",
+              "rightValue": "High",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -272,
+        -640
+      ],
+      "id": "4d2cfedb-ca8c-436e-b0fb-23b413945c0f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0C187JT95H",
+          "mode": "id"
+        },
+        "text": "=ðŸš¨ High-Risk Fabric Migration Assessment  Project: {{ $json.project_id }} Risk Level: {{ $json.risk_level }} Confidence: {{ $json.confidence }}  Recommended Fabric Area: {{ $json.recommended_fabric_area }}  Reason: {{ $json.reason }}  Human Review Required: {{ $json.human_review_required }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        32,
+        -656
+      ],
+      "id": "ee39bd31-c26f-41bf-96a6-edcc33e750a1",
+      "name": "Send a message",
+      "webhookId": "7e6b7aa6-b611-4846-bf11-8eea3bf0f2f2",
+      "credentials": {
+        "slackApi": {
+          "id": "n69OMrtHagsYz5sk",
+          "name": "Fabric Migration Assistant"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputItems = $input.all();\n\n/*\n * Parse one CSV line while respecting quoted values.\n * Example:\n * MIG001,Sales Analytics,\"ADF, ADLS\",High\n */\nfunction parseCsvLine(line) {\n  const values = [];\n  let current = '';\n  let insideQuotes = false;\n\n  for (let i = 0; i < line.length; i++) {\n    const char = line[i];\n\n    if (char === '\"') {\n      // Handle escaped quote: \"\"\n      if (insideQuotes && line[i + 1] === '\"') {\n        current += '\"';\n        i++;\n      } else {\n        insideQuotes = !insideQuotes;\n      }\n    } else if (char === ',' && !insideQuotes) {\n      values.push(current.trim());\n      current = '';\n    } else {\n      current += char;\n    }\n  }\n\n  values.push(current.trim());\n\n  return values;\n}\n\n\n/*\n * Convert the strange Extract-from-File output:\n *\n * {\n *   \"project_id,application_name,...\":\n *   \"MIG001,Sales Analytics,...\"\n * }\n *\n * into a normal JSON object.\n */\nfunction parseExtractedItem(json) {\n\n  // If n8n already parsed the CSV properly,\n  // simply use the object as-is.\n  if (json.project_id) {\n    return json;\n  }\n\n  const keys = Object.keys(json);\n\n  if (keys.length !== 1) {\n    throw new Error(\n      `Unexpected CSV structure: ${JSON.stringify(json)}`\n    );\n  }\n\n  const headerLine = keys[0];\n  const dataLine = json[headerLine];\n\n  const headers = parseCsvLine(headerLine);\n  const values = parseCsvLine(dataLine);\n\n  if (headers.length !== values.length) {\n    throw new Error(\n      `CSV column mismatch. Headers=${headers.length}, Values=${values.length}`\n    );\n  }\n\n  const parsed = {};\n\n  headers.forEach((header, index) => {\n    parsed[header] = values[index];\n  });\n\n  return parsed;\n}\n\n\nfunction normalizeSourcePlatform(value) {\n  const v = (value || '').trim().toLowerCase();\n\n  if (v === 'hd insight' || v === 'hdinsight') {\n    return 'HDInsight';\n  }\n\n  if (v === 'azure data factory') {\n    return 'Azure Data Factory';\n  }\n\n  if (v === 'azure synapse analytics') {\n    return 'Azure Synapse Analytics';\n  }\n\n  if (v === 'power bi') {\n    return 'Power BI';\n  }\n\n  if (v === 'azure databricks') {\n    return 'Azure Databricks';\n  }\n\n  return value ? value.trim() : value;\n}\n\n\nfunction normalizeBusinessCriticality(value) {\n  const v = (value || '').trim().toLowerCase();\n\n  if (v === 'high') return 'High';\n  if (v === 'medium') return 'Medium';\n  if (v === 'low') return 'Low';\n\n  return value ? value.trim() : value;\n}\n\n\nfunction normalizeDependencies(value) {\n  if (Array.isArray(value)) {\n    return value.map(v => v.trim());\n  }\n\n  return (value || '')\n    .split(';')\n    .map(v => v.trim())\n    .filter(Boolean)\n    .map(v => {\n      const lower = v.toLowerCase();\n\n      if (lower === 'adf') return 'ADF';\n      if (lower === 'adls') return 'ADLS';\n      if (lower === 'adls gen2') return 'ADLS Gen2';\n      if (lower === 'sql db') return 'SQL DB';\n      if (lower === 'event hubs') return 'Event Hubs';\n\n      return v;\n    });\n}\n\n\nreturn inputItems.map(inputItem => {\n\n  const item = parseExtractedItem(inputItem.json);\n\n  return {\n    json: {\n      project_id: item.project_id,\n      application_name: item.application_name,\n      source_platform: normalizeSourcePlatform(item.source_platform),\n      workload_type: item.workload_type,\n      data_size_gb: Number(item.data_size_gb),\n      daily_jobs: Number(item.daily_jobs),\n      dependencies: normalizeDependencies(item.dependencies),\n      business_criticality:\n        normalizeBusinessCriticality(item.business_criticality),\n      current_issues: item.current_issues,\n      target_platform: item.target_platform\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -832,
+        -544
+      ],
+      "id": "034037de-739f-4063-8acc-97379cc10a1d",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "file0",
+        "options": {
+          "delimiter": ","
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -1120,
+        -544
+      ],
+      "id": "b493f17e-b9fe-4bfc-9b13-c74bf555e3f8",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        -256,
+        -448
+      ],
+      "id": "9f4633bf-b392-4030-9e99-17edc4519163",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fabric-migration-assessment",
+        "responseMode": "responseNode",
+        "options": {
+          "binaryPropertyName": "file"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1408,
+        -544
+      ],
+      "id": "33dc090c-1543-497d-8c2b-11219a00e1db",
+      "name": "Webhook",
+      "webhookId": "79dc2d05-f901-4e10-80a6-1e807fd86626"
+    },
+    {
+      "parameters": {
+        "respondWith": "binary",
+        "responseDataSource": "set",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        48,
+        -448
+      ],
+      "id": "a243ff76-90b0-40c7-80e9-c7e88964ee0a",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f021683e-e451-4700-8aa6-788bb353977f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "71e76cc0caee9915ee57a9875b592a94cb8e45bec8833e7d9e651e926b4b0070"
+  },
+  "nodeGroups": [],
+  "id": "XEK2rtKClpAxzrty",
+  "tags": []
+}

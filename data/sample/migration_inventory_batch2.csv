@@ -1,0 +1,6 @@
+project_id,application_name,source_platform,workload_type,data_size_gb,daily_jobs,dependencies,business_criticality,current_issues,target_platform
+MIG006,Marketing Analytics,azure data factory,Data Pipeline,310,42,ADLS Gen2; Azure SQL DB,HIGH,Pipeline retries and long refresh windows,Microsoft Fabric
+MIG007,Enterprise Data Hub,Azure Synapse Analytics,Data Warehouse,1750,20,ADLS Gen2; Power BI,High,Month-end query latency and concurrency pressure,Microsoft Fabric
+MIG008,Supply Chain Processing,Azure Databricks,Spark,2650,56,Event Hubs; ADLS Gen2; ADF,MEDIUM,High compute cost and complex notebook orchestration,Microsoft Fabric
+MIG009,Executive Reporting,power bi,Reporting,95,16,Azure SQL Database,low,Refresh delays and dataset maintenance overhead,Microsoft Fabric
+MIG010,Customer Data Processing,HD insight,Spark,980,30,ADF; adls,HIGH,Long Spark job duration and cluster management overhead,Microsoft Fabric

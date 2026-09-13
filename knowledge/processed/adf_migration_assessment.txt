@@ -1,0 +1,90 @@
+TITLE: Assess your Azure Data Factory and Synapse pipelines for upgrade to Fabric Data Factory - Azure Data Factory | Microsoft Learn
+SOURCE_URL: https://learn.microsoft.com/en-us/azure/data-factory/how-to-assess-your-azure-data-factory-to-fabric-data-factory-migration
+SOURCE_TYPE: Microsoft Learn
+
+============================================================
+
+Read in English
+Edit
+Note
+Access to this page requires authorization. You can try
+signing in
+or
+changing directories
+.
+Access to this page requires authorization. You can try
+changing directories
+.
+Assess your pipelines for upgrade to Fabric Data Factory
+Use the built-in upgrade assessment to quickly check pipeline readiness and identify activity compatibility issues before migrating to Fabric.
+Assess your Azure Data Factory pipelines for migration
+In
+Azure Data Factory
+, open the factory you'd like to assess for migration. On the authoring canvas toolbar select
+Migrate to Fabric (Preview)
+>
+Get started (preview)
+to evaluate pipelines and activities for migration readiness.
+This opens a side pane showing a preview of the list of pipelines in your data factory with expandable list of activities within the pipeline.
+Assess your Azure Synapse Analytics pipelines for migration
+In
+Azure Synapse Analytics
+, open the pipelines you'd like to assess for migration. In the Integrate hub, select
+Migrate to Fabric (Preview)
+>
+Get started (preview)
+This opens a side pane showing a preview of the list of pipelines in your Synapse workspace with expandable list of activities within the pipeline.
+You can export both ADF and Synapse assessment results as a .csv file, which lists pipeline names, activity-level statuses, and compatibility notes.
+Some results point to features that are still in progress or out of scope. Use the results to prioritize the fixes and begin migration.
+What the assessment statuses mean
+You’ll see one of the four results for each pipeline (and summarized at the factory level):
+Status
+Meaning
+Ready
+Good to go for migration
+Needs review
+Requires changes before migration, such as global parameters
+Coming soon
+Support in progress; migrate later
+Not compatible
+No equivalent in Fabric; refactor required
+View activity-level compatibility for each pipeline
+In the assessment side pane, expand each pipeline to see:
+Activity-level status (which activities block migration).
+A summary of Ready/Needs review/Not compatible counts across pipelines.
+Use this list to build your to-do plan (what to fix, what to defer, and what to replace).
+Start migration after assessment
+When your assessment shows acceptable readiness:
+Select Next to begin the  migration flow.
+Refer to planning guides for best practices.
+FAQ
+Does the assessment change my factory?
+Answer: No. It only scans your configuration and lists findings in the side pane. You can safely run it to understand impact before migration.
+Why do I see Coming soon?
+Answer: It means the product team is actively adding support for those items.
+If they're critical to your pipeline, plan to migrate later when support is added, redesign the affected steps, or as an alternative use the
+PowerShell upgrade tool
+for scripted migration scenarios.
+Note
+Mapping data flows (MDF) migration is now supported in preview. Mapping data flows are converted to MDF transforms in Dataflow Gen2 during migration. For details, see
+Upgrade Azure Data Factory Mapping Data Flows pipelines to Fabric
+.
+What if only one activity is Not compatible?
+Answer: You can still migrate the pipeline after you refactor or replace that activity. The assessment helps you identify exactly where to focus.
+Can I rerun the assessment after making changes?
+Answer: Yes, you can rerun anytime to validate updates.
+Related content
+Upgrade your Azure Data Factory pipelines to Fabric (preview)
+Upgrade Azure Data Factory Mapping Data Flows pipelines to Fabric (preview)
+Upgrade your Azure Synapse Analytics pipelines to Fabric (preview)
+Compare Azure Data Factory and Fabric Data Factory
+Migration best practices
+Connector parity
+Feedback
+Was this page helpful?
+No
+Need help with this topic?
+Want to try using Ask Learn to clarify or guide you through this topic?
+Additional resources
+Last updated on
+2026-06-30

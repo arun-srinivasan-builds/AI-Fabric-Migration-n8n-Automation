@@ -1,0 +1,6 @@
+"project_id,application_name,source_platform,workload_type,data_size_gb,daily_jobs,dependencies,business_criticality,current_issues,target_platform"
+"MIG001,Sales Analytics,HD insight,Spark,850,24,""ADF; adls"",HIGH,""Long Spark processing time"",Microsoft Fabric"
+"MIG002,Finance Reporting,Azure Data Factory,Data Pipeline,220,65,""ADLS Gen2; SQL DB"",High,""Long pipeline runtime and frequent retries"",Microsoft Fabric"
+"MIG003,Customer Insights,Azure Synapse Analytics,Data Warehouse,1450,18,""ADLS Gen2; Power BI"",Medium,""High query latency during month-end reporting"",Microsoft Fabric"
+"MIG004,Operations Dashboard,Power BI,Reporting,120,12,""Azure SQL Database"",LOW,""Refresh delays during peak hours"",Microsoft Fabric"
+"MIG005,IoT Processing,Azure Databricks,Spark,2100,48,""Event Hubs; ADLS Gen2; ADF"",High,""Increasing compute cost and complex orchestration"",Microsoft Fabric"
