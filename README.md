@@ -154,7 +154,6 @@ Week3-Capstone-AI-Fabric-Migration/
 │   └── faiss_index/
 │
 ├── n8n/
-├── tests/
 ├── docs/
 ├── assets/
 │   ├── architecture/
