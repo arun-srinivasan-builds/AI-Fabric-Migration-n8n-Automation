@@ -1,5 +1,22 @@
 # AI-Powered Fabric Migration Assessment Platform
 
+<!-- portfolio-readme-overview -->
+## At a glance
+
+**Category:** Learning Build · Fabric migration assessment  
+**Focus:** A hands-on migration assessment workflow combining n8n, FastAPI, retrieval-augmented generation, FAISS, validation and reporting.
+
+**Scope:** The assessed scenarios are intentionally limited; results are demonstrations of an engineering approach rather than comprehensive migration recommendations.
+
+### Explore
+
+- **How it works:** See the architecture and workflow sections below.
+- **How it is checked:** See guardrails, evaluations, tests and recorded findings below.
+- **How to run it:** See the local setup and Docker instructions below, where provided.
+
+<!-- /portfolio-readme-overview -->
+
+
 A hands-on GenAI learning project for assessing migration workloads targeting **Microsoft Fabric**.
 
 The solution combines **multi-file inventory processing, n8n ETL and workflow automation, FastAPI, Retrieval-Augmented Generation (RAG), FAISS, OpenAI embeddings, GPT-4.1, deterministic validation guardrails, Slack escalation, and Streamlit reporting**.
