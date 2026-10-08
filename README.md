@@ -1,8 +1,8 @@
 # AI-Powered Fabric Migration Assessment Platform
 
-An enterprise-style GenAI platform for assessing migration workloads targeting **Microsoft Fabric**.
+A hands-on GenAI learning project for assessing migration workloads targeting **Microsoft Fabric**.
 
-The solution combines **multi-file inventory processing, n8n ETL and workflow automation, FastAPI, Retrieval-Augmented Generation (RAG), FAISS, OpenAI embeddings, GPT-4.1, deterministic enterprise guardrails, Slack escalation, and Streamlit reporting**.
+The solution combines **multi-file inventory processing, n8n ETL and workflow automation, FastAPI, Retrieval-Augmented Generation (RAG), FAISS, OpenAI embeddings, GPT-4.1, deterministic validation guardrails, Slack escalation, and Streamlit reporting**.
 
 ![AI-Powered Fabric Migration Assessment Platform](assets/architecture/fabric-migration-architecture.png)
 
@@ -94,7 +94,7 @@ Migration inventory schema, multi-file processing, deliberately inconsistent inp
 
 ### [04 – RAG Pipeline](docs/04-rag-pipeline.md)
 
-Microsoft Learn ingestion, cleaning, chunking, OpenAI embeddings, FAISS, retrieval, GPT-4.1 assessment, validation and enterprise safeguards.
+Microsoft Learn ingestion, cleaning, chunking, OpenAI embeddings, FAISS, retrieval, GPT-4.1 assessment, validation and validation safeguards.
 
 ### [05 – API Automation](docs/05-api-automation.md)
 
