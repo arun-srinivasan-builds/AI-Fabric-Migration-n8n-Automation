@@ -20,14 +20,19 @@ Python · n8n · FastAPI · FAISS · Streamlit
 
 ## Documentation
 
-- [project overview](docs/project-overview.md)
-- [02 architecture](docs/02-architecture.md)
-- [04 rag pipeline](docs/04-rag-pipeline.md)
-- [06 n8n workflow](docs/06-n8n-workflow.md)
-- [07 testing results](docs/07-testing-results.md)
-- [08 key learnings](docs/08-key-learnings.md)
-- [PROJECT GUIDE](docs/PROJECT-GUIDE.md)
+| Document | Details |
+|---|---|
+| [01 environment setup](docs/01-environment-setup.md) | Technical reference and project evidence |
+| [02 architecture](docs/02-architecture.md) | Technical reference and project evidence |
+| [03 data and etl](docs/03-data-and-etl.md) | Technical reference and project evidence |
+| [04 rag pipeline](docs/04-rag-pipeline.md) | Technical reference and project evidence |
+| [05 api automation](docs/05-api-automation.md) | Technical reference and project evidence |
+| [06 n8n workflow](docs/06-n8n-workflow.md) | Technical reference and project evidence |
+| [07 testing results](docs/07-testing-results.md) | Technical reference and project evidence |
+| [08 key learnings](docs/08-key-learnings.md) | Technical reference and project evidence |
+| [PROJECT GUIDE](docs/PROJECT-GUIDE.md) | Original detailed project README |
+| [project overview](docs/project-overview.md) | Technical reference and project evidence |
 
 ## Scope
 
-This repository documents a hands-on build and its engineering learnings. See the linked project guide for implementation details, setup, testing, and any deployment notes. Features and results should be interpreted within the documented project scope.
+This is a learning and engineering portfolio project. See linked documents for implementation, validation, limitations and setup.
